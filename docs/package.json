@@ -1,0 +1,13 @@
+{
+  "name": "schema",
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "start": "vite"
+  },
+  "dependencies": {
+    "@stoplight/elements": "^8.0.5"
+  },
+  "devDependencies": {
+    "vite": "^5.1.3"
+  }
+}

@@ -1,0 +1,150 @@
+openapi: 3.1.0
+info: 
+  title: Template API
+  version: "1.0"
+
+servers: 
+  - url: http://localhost:{port}/{basePath}
+    description: Local Server
+    variables:
+      port:
+        default: '8080'
+      basePath:
+        default: api/v1
+
+paths: 
+  /todos:
+    get:
+      summary: List Todo
+      description: "Todo一覧を返却する"
+      operationId: FindAllTodo
+      tags: 
+        - Todo
+      parameters:
+        - name: title
+          in: query
+          schema: 
+            type: string
+            example: "UI"
+            description: "部分一致で検索"
+        - name: done
+          in: query
+          schema:
+            type: boolean
+            example: false
+        - name: is_deleted
+          in: query
+          schema:
+            type: boolean
+            example: false
+        - name: sort
+          in: query
+          schema:
+            type: string
+            example: "created_at"
+        - name: limit
+          in: query
+          schema:
+            type: number
+            example: 50
+            default: 30
+        - name: offset
+          in: query
+          schema:
+            type: number
+            example: 10
+            default: 0
+      responses: 
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Todo"
+    post:
+      summary: Create Todo
+      description: "Todoを作成する"
+      operationId: CreateTodo
+      tags:
+        - Todo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoPostBody"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema: 
+                type: string
+                example: OK
+
+  /todos/{id}:
+    get:
+      summary: One of Todo
+      description: "IDに一致するTodoを返却する"
+      operationId: FindTodoById
+      tags:
+        - Todo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Todo ID
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Todo"
+        "403":
+          description: "Resource Not Found"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Record Not Found"
+
+      
+components:
+  schemas: 
+    Todo:
+      type: object
+      properties: 
+        id: 
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "UIデザインを作成する"
+        done:
+          type: boolean
+          example: false
+        is_deleted:
+          type: boolean
+          example: false
+        created_at:
+          type: string
+          format: date
+          example: "2024-02-10T16:31:56+09:00"
+        updated_at:
+          type: string
+          format: date
+          example: "2024-02-10T16:31:56+09:00"
+    TodoPostBody:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "テストコードの作成"
+        done:
+          type: boolean
+          example: false

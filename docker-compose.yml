@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  mysql:
+    image: mysql:8.2
+    environment:
+      MYSQL_DATABASE: template_app
+      MYSQL_ROOT_PASSWORD: password
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      # sql読み込み
+      - ./docker/initdb.d:/docker-entrypoint-initdb.d
+      # mysqlの設定を反映する
+      - ./docker/conf.d:/etc/mysql/conf.d
+    ports:
+      - 3306:3306
