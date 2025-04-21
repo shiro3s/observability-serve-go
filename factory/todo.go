@@ -5,7 +5,7 @@ import (
 	"template_app/repositories"
 	"template_app/services"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 

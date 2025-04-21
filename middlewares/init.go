@@ -1,8 +1,9 @@
 package middlewares
 
 import (
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 )
 
 func Init(e *echo.Echo) {
@@ -18,4 +19,5 @@ func Init(e *echo.Echo) {
 	}))
 	e.Use(middleware.Secure())
 	e.Use(MySQLConnectMiddleware())
+	e.Use(otelecho.Middleware("api-server"))
 }
