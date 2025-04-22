@@ -1,5 +1,8 @@
 version: "3.3"
 
+networks:
+  monitoring:
+
 services:
   mysql:
     image: mysql:8.2
@@ -14,24 +17,51 @@ services:
       - ./docker/mysql/conf.d:/etc/mysql/conf.d
     ports:
       - 3306:3306
+  tempo:
+    image: grafana/tempo
+    container_name: tempo
+    ports:
+      - 3200:3200
+      - 4317
+      - 4318
+    command: [
+      "-config.file=/etc/tempo/tempo.yml",
+    ]
+    volumes:
+      - ./docker/tempo/tempo.yml:/etc/tempo.yml
+      - ./docker/tempo/volume:/var/tempo
+    networks:
+      - monitoring
   grafana:
     image: grafana/grafana
+    container_name: grafana
     volumes:
+      - ./docker/grafana/provisioning/:/etc/grafana/provisioning
       - ./docker/grafana/volume:/var/lib/grafana
     ports:
       - 3000:3000
     user: "0:"
+    depends_on:
+      - tempo
+    networks:
+      - monitoring
   alloy:
     image: grafana/alloy
-    command: ["run", "--server.http.listen-addr=0.0.0.0:12345", "/etc/alloy/config.alloy"]
+    container_name: alloy
+    command: [
+      "run", 
+      "--server.http.listen-addr=0.0.0.0:12345",
+      "/etc/alloy/config.alloy"
+    ]
     volumes:
       - ./docker/alloy/config.alloy:/etc/alloy/config.alloy
     ports:
       - 12345:12345
+      # OTLP gRPC receiver
       - 4317:4317
+      # OTLP HTTP receiver
       - 4318:4318
-  tempo:
-    image: grafana/tempo
-    ports:
-      - 3200:3200
-    command: [""]
+    depends_on:
+      - tempo
+    networks:
+      - monitoring

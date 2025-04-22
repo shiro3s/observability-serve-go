@@ -26,7 +26,7 @@ func NewExporter() (sdktrace.SpanExporter, error) {
 	// Grafana Alloy に送信
 	return otlptracehttp.New(
 		context.Background(),
-		otlptracehttp.WithEndpoint("localhost:4318"),
+		otlptracehttp.WithEndpoint("alloy:4318"),
 		otlptracehttp.WithInsecure(),
 	)
 }
