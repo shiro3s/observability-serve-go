@@ -1,11 +1,3 @@
-# Template Echo
+# Observability serve
 
-## Stack
-
-| \- | \- | 説明 | 備考 |
-| :-- | :-- | :-- | :-- |
-| Language | Go | \- | \- |
-| Framework | Echo | \-  | \- |
-
-## Directory Architecture
-
+Grafana & OpenTelemetry でのオブザーバビリティ環境の構築

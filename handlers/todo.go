@@ -12,6 +12,9 @@ import (
 )
 
 func FindTodoAll(c echo.Context) error {
+	_, span := utils.Tracer.Start(c.Request().Context(), "findTodoAll")
+	defer span.End()
+
 	service := factory.NewTodoFactory(c).TodoService()
 
 	cond := models.NewTodoSearchParameter()

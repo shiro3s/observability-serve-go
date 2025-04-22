@@ -9,8 +9,29 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       # sql読み込み
-      - ./docker/initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
       # mysqlの設定を反映する
-      - ./docker/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
     ports:
       - 3306:3306
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - ./docker/grafana/volume:/var/lib/grafana
+    ports:
+      - 3000:3000
+    user: "0:"
+  alloy:
+    image: grafana/alloy
+    command: ["run", "--server.http.listen-addr=0.0.0.0:12345", "/etc/alloy/config.alloy"]
+    volumes:
+      - ./docker/alloy/config.alloy:/etc/alloy/config.alloy
+    ports:
+      - 12345:12345
+      - 4317:4317
+      - 4318:4318
+  tempo:
+    image: grafana/tempo
+    ports:
+      - 3200:3200
+    command: [""]
