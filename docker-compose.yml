@@ -3,6 +3,10 @@ version: "3.3"
 networks:
   monitoring:
 
+volumes:
+  tempo-data: {}
+  grafana-data: {}
+
 services:
   mysql:
     image: mysql:8.2
@@ -24,13 +28,12 @@ services:
       - 3200:3200
       - 4317
       - 4318
-    user: "1000:"
     command: [
       "-config.file=/etc/tempo/tempo.yaml",
     ]
     volumes:
       - ./docker/tempo/tempo.yaml:/etc/tempo/tempo.yaml
-      - ./docker/tempo/volume:/var/tempo
+      - tempo-data:/var/tempo
     networks:
       - monitoring
   grafana:
@@ -38,7 +41,7 @@ services:
     container_name: grafana
     volumes:
       - ./docker/grafana/provisioning/:/etc/grafana/provisioning
-      - ./docker/grafana/volume:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     ports:
       - 3000:3000
     user: "1000:"
