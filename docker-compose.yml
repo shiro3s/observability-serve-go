@@ -6,6 +6,7 @@ networks:
 volumes:
   tempo-data: {}
   grafana-data: {}
+  loki-data: {}
 
 services:
   mysql:
@@ -36,6 +37,20 @@ services:
       - tempo-data:/var/tempo
     networks:
       - monitoring
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - 3100:3100
+    command: [
+      "-config.file=/etc/loki/config.yaml"
+    ]
+    volumes:
+      - ./docker/loki/config.yaml:/etc/loki/config.yaml
+      - loki-data:/loki
+    networks:
+      - monitoring
+    restart: unless-stopped
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -47,6 +62,7 @@ services:
     user: "1000:"
     depends_on:
       - tempo
+      - loki
     networks:
       - monitoring
   alloy:
@@ -67,5 +83,6 @@ services:
       - 4318:4318
     depends_on:
       - tempo
+      - loki
     networks:
       - monitoring

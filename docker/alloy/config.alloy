@@ -1,3 +1,7 @@
+logging {
+  level = "debug"
+}
+
 // アプリケーションからのトレースを受け取る
 otelcol.receiver.otlp "default" {
   grpc {
@@ -31,5 +35,12 @@ otelcol.exporter.otlp "tempo" {
     tls {
       insecure = true
     }
+  }
+}
+
+// 収集したログをLokiへ書き込む
+loki.write "loki" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
   }
 }
