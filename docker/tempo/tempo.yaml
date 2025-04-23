@@ -2,6 +2,7 @@ server:
   http_listen_port: 3200
 
 distributor:
+  # データ受信設定
   receivers:
     otlp:
       protocols:
@@ -11,7 +12,8 @@ distributor:
           endpoint: "0.0.0.0:4317"
 
 compactor:
-  block_retention: 24h
+  compaction:
+    block_retention: 24h
 
 storage:
   trace:
@@ -20,6 +22,3 @@ storage:
     local:
       # トレースデータの保存先
       path: /var/tempo
-
-search:
-  enabled: true

@@ -17,6 +17,10 @@ otelcol.receiver.otlp "default" {
 
 otelcol.processor.batch "default" {
   timeout = "2s"
+
+  output {
+    traces = [otelcol.exporter.otlp.tempo.input]
+  }
 }
 
 // OTLP Exporter: Tempoへトレースデータを送る
@@ -28,11 +32,4 @@ otelcol.exporter.otlp "tempo" {
       insecure = true
     }
   }
-}
-
-// receiver -> processor -> exporterの流れを定義
-otelcol.service.pipline "traces" {
-  receivers = [otelcol.receiver.otlp.default]
-  processors = [otelcol.processor.batch.default]
-  exporters = [otelcol.exporter.otelcol.tempo]
 }
