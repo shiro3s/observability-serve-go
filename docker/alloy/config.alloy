@@ -1,8 +1,4 @@
-logging {
-  level = "debug"
-}
-
-// アプリケーションからのトレースを受け取る
+// アプリケーションからのログ・トレースを受け取る
 otelcol.receiver.otlp "default" {
   grpc {
     endpoint = "0.0.0.0:4317"
@@ -13,9 +9,8 @@ otelcol.receiver.otlp "default" {
   }
 
   output {
-    traces = [
-      otelcol.processor.batch.default.input,
-    ]
+    // トレースデータは processor.batch.default へ送信
+    traces = [otelcol.processor.batch.default.input]
   }
 }
 
@@ -39,7 +34,7 @@ otelcol.exporter.otlp "tempo" {
 }
 
 // 収集したログをLokiへ書き込む
-loki.write "loki" {
+loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"
   }

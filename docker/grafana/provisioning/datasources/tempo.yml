@@ -15,10 +15,15 @@ datasources:
           "job",
           "instance",
           "pod",
-          "namespace"
+          "namespace",
+          "container",
+          "compose_service"
         ]
-        mapTagNamesEnabled: false
-        spanStartTimeShift: "1h"
-        spanEndTimeShift: "1h"
+        mappedTags: [
+          {key: "service.name", value: "compose_service"}
+        ]
+        spanStartTimeShift: "-1m"
+        spanEndTimeShift: "+1m"
         filterByTraceID: true
         filterBySpanId: false
+        lokiSearch: true
