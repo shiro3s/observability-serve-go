@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"template_app/utils"
 
 	"github.com/grafana/loki-client-go/loki"
@@ -16,8 +15,6 @@ func LokiLoggerMiddleware(client *loki.Client) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 			spanCtx := trace.SpanContextFromContext(ctx)
-
-			fmt.Println(c.Request())
 
 			labels := model.LabelSet{
 				"service_name": "api-service",
