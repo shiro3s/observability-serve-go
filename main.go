@@ -17,8 +17,14 @@ func main() {
 	}
 	defer cleanup()
 
+	lokiClient, err := utils.NewLokiLogger()
+	if err != nil {
+		panic(err)
+	}
+	defer lokiClient.Stop()
+
 	e := echo.New()
-	middlewares.Init(e)
+	middlewares.Init(e, lokiClient)
 	routes.Init(e)
 
 	e.Logger.Fatal(e.Start(":8080"))

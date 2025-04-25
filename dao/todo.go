@@ -40,7 +40,7 @@ func FindTodoById(db *gorm.DB, id int, cond models.TodoParam) (*models.Todo, err
 	session := db.Table("t_todos")
 	todo := models.Todo{}
 
-	session.Where("id = ? and is_deleted = ?", id, true)
+	session.Where("id = ? and is_deleted = ?", id, cond.IsDeleted)
 	result := session.Take(&todo)
 
 	if result.Error != nil {

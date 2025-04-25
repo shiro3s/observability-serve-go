@@ -27,3 +27,14 @@ datasources:
         filterByTraceID: true
         filterBySpanId: false
         lokiSearch: true
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: false
+    jsonData:
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: "traceid=(\\w+)"
+          name: TraceID
+          url: '$${__value.raw}'

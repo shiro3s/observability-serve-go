@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"fmt"
 
+	"github.com/grafana/loki-client-go/loki"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 	"go.opentelemetry.io/otel/trace"
 )
 
-func Init(e *echo.Echo) {
+func Init(e *echo.Echo, lokiClient *loki.Client) {
+	e.Use(middleware.RequestID())
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -30,5 +32,5 @@ func Init(e *echo.Echo) {
 			return 0, nil
 		},
 	}))
-
+	e.Use(LokiLoggerMiddleware(lokiClient))
 }

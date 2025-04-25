@@ -20,11 +20,6 @@ var (
 )
 
 func NewExporter(endpoint string) (sdktrace.SpanExporter, error) {
-	// return stdouttrace.New(
-	// 	stdouttrace.WithPrettyPrint(),
-	// 	stdouttrace.WithWriter(os.Stderr),
-	// )
-
 	// Grafana Alloy に送信
 	return otlptracehttp.New(
 		context.Background(),
